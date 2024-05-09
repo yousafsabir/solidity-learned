@@ -1,21 +1,39 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-contract Mappings {
-    // A mapping a key-value pair data storage
-    mapping(int => string) public intToStringMapping;
+contract Arrays {
+    // list of homogenous data where individual data is accessed by an index
+    int256[] public listOfIntegers;
 
-    function set(int key, string memory val) external {
-        intToStringMapping[key] = val;
+    // we can also specify the size of the array
+    string[10] listOf10Strings;
+    address[5] listOf5Addresses;
+
+    // this is how we initialize an array
+    uint256[] listOfUIntegers = [1, 2, 3, 4];
+
+    function getElement(uint256 idx) external view returns (int256) {
+        return listOfIntegers[idx];
     }
 
-    function get(int key) external view returns (string memory) {
-        return intToStringMapping[key];
+    function addElement(int256 v) external {
+        listOfIntegers.push(v);
     }
 
-    function remove(int key) external {
-        delete intToStringMapping[key];
+    function getLength() external view returns (uint256) {
+        return listOfIntegers.length;
     }
 
-    // There is no way of knowing that if a key exists in a mapping
+    function removeLastElement() external {
+        listOfIntegers.pop();
+    }
+
+    function removeAtIndex(uint256 index) external {
+        if (index >= listOfIntegers.length) return;
+
+        for (uint256 i = index; i < listOfIntegers.length - 1; i++) {
+            listOfIntegers[i] = listOfIntegers[i + 1];
+        }
+        listOfIntegers.pop();
+    }
 }
