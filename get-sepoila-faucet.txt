@@ -1,0 +1,3 @@
+Go to https://faucet.chainstack.com/sepolia-testnet-faucet
+
+api key: fyqOapx3.EoJ8FKIXya7oUFf7r6DYK9yGCsQ0T9Bv
