@@ -53,4 +53,10 @@ contract Twitter {
     function likeTweet(address _author, uint _tweet) external {
         tweets[_author][_tweet].likes++;
     }
+
+    function unlikeTweet(address _author, uint256 _tweet) external {
+        if (tweets[_author][_tweet].likes > 0) {
+            tweets[_author][_tweet].likes--;
+        }
+    }
 }
