@@ -8,6 +8,7 @@ pragma solidity ^0.8.19;
 // 5️⃣ Add array of tweets
 
 struct Tweet {
+    uint id;
     address author;
     string content;
     uint timestamp;
@@ -28,6 +29,8 @@ contract Twitter {
         _;
     }
 
+    event TweetCreated(address author, uint id, string content, uint timestamp);
+
     function changeTweetLimit(uint16 newLimit) external ownerOnly {
         MAX_TWEET_LENGTH = newLimit;
     }
@@ -36,7 +39,22 @@ contract Twitter {
         // restricting tweet length to 280 characters only
         require(bytes(_tweet).length <= MAX_TWEET_LENGTH, "Tweet is too long");
 
-        tweets[msg.sender].push(Tweet(msg.sender, _tweet, block.timestamp, 0));
+        Tweet memory newTweet = Tweet(
+            tweets[msg.sender].length,
+            msg.sender,
+            _tweet,
+            block.timestamp,
+            0
+        );
+
+        tweets[msg.sender].push(newTweet);
+
+        emit TweetCreated(
+            newTweet.author,
+            newTweet.id,
+            newTweet.content,
+            newTweet.timestamp
+        );
     }
 
     function getTweet(
