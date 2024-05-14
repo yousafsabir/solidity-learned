@@ -24,12 +24,25 @@ contract Twitter {
         owner = msg.sender;
     }
 
+    // * -------- Modifiers --------
+
     modifier ownerOnly() {
         require(msg.sender == owner, "You're not the Owner");
         _;
     }
 
+    // * -------- Events --------
+
     event TweetCreated(address author, uint id, string content, uint timestamp);
+
+    event TweetLiked(
+        address liker,
+        address author,
+        uint tweetId,
+        uint newLikeCount
+    );
+
+    // * -------- Functions --------
 
     function changeTweetLimit(uint16 newLimit) external ownerOnly {
         MAX_TWEET_LENGTH = newLimit;
@@ -70,11 +83,25 @@ contract Twitter {
 
     function likeTweet(address _author, uint _tweet) external {
         tweets[_author][_tweet].likes++;
+
+        emit TweetLiked(
+            msg.sender,
+            _author,
+            _tweet,
+            tweets[_author][_tweet].likes
+        );
     }
 
     function unlikeTweet(address _author, uint256 _tweet) external {
         if (tweets[_author][_tweet].likes > 0) {
             tweets[_author][_tweet].likes--;
+
+            emit TweetLiked(
+                msg.sender,
+                _author,
+                _tweet,
+                tweets[_author][_tweet].likes
+            );
         }
     }
 }
